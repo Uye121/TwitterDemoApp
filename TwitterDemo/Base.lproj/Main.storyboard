@@ -25,7 +25,9 @@
                                 <rect key="frame" x="49" y="313" width="222" height="143"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.55294117649999996" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Log in with Twitter">
+                                    <color key="titleColor" red="0.4115253698520791" green="0.92428959238982711" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="onLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="H6P-ab-0yq"/>
                                 </connections>
