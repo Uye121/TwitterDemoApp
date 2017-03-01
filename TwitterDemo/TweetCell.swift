@@ -22,9 +22,6 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var favoriteButton: UIImageView!
     @IBOutlet weak var favoriteCountLabel: UILabel!
     
-    var userRetweet = false
-    var userFavorite = false
-    
     var tweet: Tweet! {
         didSet {
             userNameLabel.text = tweet.user?.name
@@ -75,10 +72,11 @@ class TweetCell: UITableViewCell {
     }
     
     func tappedRetweetImage(_ sender: Any) {
-        if(userRetweet) {
+        if(tweet.favorited!) {
+            tweet.retweetCount -= 1
             retweetButton.image = UIImage(named: "retweet-icon")
             retweetCountLabel.text = "\(tweet.retweetCount)"
-            userRetweet = false
+            tweet.favorited = false
         } else {
             retweetButton.image = UIImage(named: "retweet-icon-green")
             
@@ -88,16 +86,18 @@ class TweetCell: UITableViewCell {
                 print(error.localizedDescription)
             })
             
-            retweetCountLabel.text = "\((tweet.retweetCount)+1)"
-            userRetweet = true
+            tweet.retweetCount += 1
+            retweetCountLabel.text = "\((tweet.retweetCount))"
+            tweet.favorited = true
         }
     }
     
     func tappedFavoriteImage(_ sender: Any) {
-        if(userFavorite) {
-            favoriteButton.image = UIImage(named: "fav-icon")
+        if(tweet.retweeted!) {
+            tweet.favoriteCount -= 1
+            favoriteButton.image = UIImage(named: "favor-icon")
             favoriteCountLabel.text = "\(tweet.favoriteCount)"
-            userFavorite = false
+            tweet.retweeted = false
         } else {
             favoriteButton.image = UIImage(named: "favor-icon-red")
             
@@ -107,8 +107,9 @@ class TweetCell: UITableViewCell {
                 print(error.localizedDescription)
             })
             
-            favoriteCountLabel.text = "\((tweet.favoriteCount)+1)"
-            userFavorite = true
+            tweet.favoriteCount += 1
+            favoriteCountLabel.text = "\((tweet.favoriteCount))"
+            tweet.retweeted = true
         }
     }
     
