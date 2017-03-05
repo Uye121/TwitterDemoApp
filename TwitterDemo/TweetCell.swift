@@ -72,11 +72,11 @@ class TweetCell: UITableViewCell {
     }
     
     func tappedRetweetImage(_ sender: Any) {
-        if(tweet.favorited!) {
+        if(tweet.retweeted!) {
             tweet.retweetCount -= 1
             retweetButton.image = UIImage(named: "retweet-icon")
             retweetCountLabel.text = "\(tweet.retweetCount)"
-            tweet.favorited = false
+            tweet.retweeted = false
         } else {
             retweetButton.image = UIImage(named: "retweet-icon-green")
             
@@ -88,16 +88,16 @@ class TweetCell: UITableViewCell {
             
             tweet.retweetCount += 1
             retweetCountLabel.text = "\((tweet.retweetCount))"
-            tweet.favorited = true
+            tweet.retweeted = true
         }
     }
     
     func tappedFavoriteImage(_ sender: Any) {
-        if(tweet.retweeted!) {
+        if(tweet.favorited)! {
             tweet.favoriteCount -= 1
             favoriteButton.image = UIImage(named: "favor-icon")
             favoriteCountLabel.text = "\(tweet.favoriteCount)"
-            tweet.retweeted = false
+            tweet.favorited = false
         } else {
             favoriteButton.image = UIImage(named: "favor-icon-red")
             
@@ -108,8 +108,8 @@ class TweetCell: UITableViewCell {
             })
             
             tweet.favoriteCount += 1
-            favoriteCountLabel.text = "\((tweet.favoriteCount))"
-            tweet.retweeted = true
+            favoriteCountLabel.text = "\(tweet.favoriteCount)"
+            tweet.favorited = true
         }
     }
     
