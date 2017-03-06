@@ -1,17 +1,17 @@
 //
-//  ProfileViewController.swift
+//  OtherProfileViewController.swift
 //  TwitterDemo
 //
-//  Created by Ulric Ye on 3/4/17.
+//  Created by Ulric Ye on 3/5/17.
 //  Copyright © 2017 uye. All rights reserved.
 //
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class OtherProfileViewController: UIViewController {
     
-    @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var tweetCountLabel: UILabel!
@@ -24,20 +24,13 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        TwitterClient.sharedInstance?.currentAccount(success: { (user) in
-            //self.backgroundImage.setImageWith(user.profileBackgroundURL!)
-            self.profileImage.setImageWith(user.profileURL!)
-            self.userNameLabel.text = user.name
-            self.screenNameLabel.text = user.screenName
-            
-            self.tweetCountLabel.text = "\(user.tweetCount!)"
-            self.followingCountLabel.text = "\(user.followingCount!)"
-            self.followersCountLabel.text = "\(user.followerCount!)"
-            //self.backgroundImage.setImageWith(user.profileBackgroundURL!)
-        }, failure: { (error: Error) in
-            print(error.localizedDescription)
-        })
-
+        self.profileImage.setImageWith(user.profileURL!)
+        self.userNameLabel.text = user.name
+        self.screenNameLabel.text = user.screenName
+        self.tweetCountLabel.text = convertNumber(people: user.tweetCount!)
+        self.followingCountLabel.text = convertNumber(people: user.followingCount!)
+        self.followersCountLabel.text = convertNumber(people: user.followerCount!)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -45,6 +38,20 @@ class ProfileViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func convertNumber(people: Int) -> String {
+        var numberOfPeople: String?
+        var oneMillion = 1000000
+        var oneThousand = 1000
+        if(people >= oneMillion) {
+            numberOfPeople = "\(people/oneMillion)M"
+        } else if(people >= oneThousand) {
+            numberOfPeople = "\(people/oneThousand)K"
+        } else {
+            numberOfPeople = "\(people)"
+        }
+        
+        return numberOfPeople!
+    }
     
     /*
      // MARK: - Navigation

@@ -9,22 +9,25 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var retweetCountLabel: UILabel!
-    @IBOutlet weak var favoriteCountLabel: UILabel!    
+    @IBOutlet weak var favoriteCountLabel: UILabel!
     @IBOutlet weak var retweetButton: UIImageView!
     @IBOutlet weak var favoriteButton: UIImageView!
+    
+    @IBOutlet weak var retweetDisplayPic: UIImageView!
+    @IBOutlet weak var retweetDisplayLabel: UILabel!
     
     var tweet: Tweet?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         profileImage.setImageWith((tweet?.user?.profileURL)!)
         userNameLabel.text = tweet?.user?.name
@@ -41,6 +44,14 @@ class DetailViewController: UIViewController {
             favoriteCountLabel.text = "\(favCount)"
         }
         
+        if(tweet?.retweeted)! {
+            retweetDisplayPic.isHidden = true
+            retweetDisplayLabel.isHidden = true
+        } else {
+            retweetDisplayPic.isHidden = true
+            retweetDisplayLabel.isHidden = true
+        }
+        
         var tapTweetRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedRetweetImage(_:)))
         self.retweetButton.addGestureRecognizer(tapTweetRecognizer)
         self.retweetButton.isUserInteractionEnabled = true
@@ -49,79 +60,67 @@ class DetailViewController: UIViewController {
         self.favoriteButton.addGestureRecognizer(tapFavoriteRecognizer)
         self.favoriteButton.isUserInteractionEnabled = true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     func tappedRetweetImage(_ sender: Any) {
-        if(tweet?.retweeted!)! {
-            tweet?.retweetCount -= 1
-            retweetButton.image = UIImage(named: "retweet-icon")
-
-            if let retweetCount = tweet?.retweetCount {
-                retweetCountLabel.text = "\(retweetCount)"
-            }
-            
-            tweet?.retweeted = false
-        } else {
-            retweetButton.image = UIImage(named: "retweet-icon-green")
-            
-            TwitterClient.sharedInstance?.retweet(id: (tweet?.id!)!, success: { (tweet) in
-                
+        if(!((tweet?.retweeted!)!)) {
+            TwitterClient.sharedInstance?.retweet(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.retweetButton.image = UIImage(named: "retweet-icon-green")
+                self.retweetCountLabel.text = "\(response.retweetCount)"
+                self.tweet?.retweeted = true
+                self.retweetDisplayPic.isHidden = false
+                self.retweetDisplayLabel.isHidden = false
             }, failure: { (error: Error) in
                 print(error.localizedDescription)
             })
-            
-            tweet?.retweetCount += 1
-            
-            if let retweetCount = tweet?.retweetCount {
-                retweetCountLabel.text = "\(retweetCount)"
-            }
-
-            tweet?.retweeted = true
+        } else {
+            TwitterClient.sharedInstance?.unretweet(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.retweetButton.image = UIImage(named: "retweet-icon")
+                self.retweetCountLabel.text = "\(response.retweetCount)"
+                self.tweet?.retweeted = false
+                self.retweetDisplayPic.isHidden = true
+                self.retweetDisplayLabel.isHidden = true
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
         }
+        
     }
     
     func tappedFavoriteImage(_ sender: Any) {
-        if(tweet?.favorited!)! {
-            tweet?.favoriteCount -= 1
-            favoriteButton.image = UIImage(named: "favor-icon")
-            
-            if let retweetCount = tweet?.retweetCount {
-                retweetCountLabel.text = "\(retweetCount)"
-            }
-            
-            tweet?.favorited = false
-        } else {
-            favoriteButton.image = UIImage(named: "favor-icon-red")
-            
-            TwitterClient.sharedInstance?.favorited(id: (tweet?.id!)!, success: {
-                
+        if(!(tweet?.favorited!)!) {
+            TwitterClient.sharedInstance?.favorited(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.favoriteButton.image = UIImage(named: "favor-icon-red")
+                self.favoriteCountLabel.text = "\(response.favoriteCount)"
+                self.tweet?.favorited = true
             }, failure: { (error: Error) in
                 print(error.localizedDescription)
             })
-            
-            tweet?.favoriteCount += 1
-            
-            if let favoriteCount = tweet?.favoriteCount {
-                favoriteCountLabel.text = "\(favoriteCount)"
-            }
-
-            tweet?.favorited = true
+        } else {
+            TwitterClient.sharedInstance?.unfavorite(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.favoriteButton.image = UIImage(named: "favor-icon")
+                self.favoriteCountLabel.text = "\(response.favoriteCount)"
+                self.tweet?.favorited = false
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
         }
+
     }
     
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

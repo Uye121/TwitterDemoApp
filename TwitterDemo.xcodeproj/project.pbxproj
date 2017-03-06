@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		073E21B61E6D1FC000F31B89 /* OtherProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073E21B51E6D1FC000F31B89 /* OtherProfileViewController.swift */; };
 		074F43181E6B22E20064716B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074F43171E6B22E20064716B /* ProfileViewController.swift */; };
 		0780774E1E651E1E0018CE9F /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0780774D1E651E1E0018CE9F /* TweetCell.swift */; };
 		07A11C601E64BB6500D30047 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A11C5F1E64BB6500D30047 /* User.swift */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		02934618D058588FF66EC702 /* Pods_TwitterDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwitterDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		073E21B51E6D1FC000F31B89 /* OtherProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherProfileViewController.swift; sourceTree = "<group>"; };
 		074F43171E6B22E20064716B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0780774D1E651E1E0018CE9F /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		07A11C5F1E64BB6500D30047 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				07A11C651E64E6F500D30047 /* TweetsViewController.swift */,
 				07BFD96B1E67940E004DDF1E /* DetailViewController.swift */,
 				074F43171E6B22E20064716B /* ProfileViewController.swift */,
+				073E21B51E6D1FC000F31B89 /* OtherProfileViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				073E21B61E6D1FC000F31B89 /* OtherProfileViewController.swift in Sources */,
 				07A11C601E64BB6500D30047 /* User.swift in Sources */,
 				0780774E1E651E1E0018CE9F /* TweetCell.swift in Sources */,
 				07A11C621E64BB7400D30047 /* Tweet.swift in Sources */,

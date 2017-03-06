@@ -9,14 +9,14 @@
 import UIKit
 
 class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     var tweets: [Tweet]!
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -26,6 +26,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         TwitterClient.sharedInstance?.homeTimeLine(success: { (tweets: [Tweet]) in
             self.tweets = tweets
             
+            
             self.tableView.reloadData()
         }, failure: { (error) in
             print(error.localizedDescription)
@@ -33,7 +34,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // Do any additional setup after loading the view.
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -42,7 +43,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func onLogoutButton(_ sender: Any) {
         TwitterClient.sharedInstance?.logout()
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tweets?.count ?? 0
     }
@@ -56,29 +57,36 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
-    
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        let tabBarIndex = tabBarController.selectedIndex
-        if tabBarIndex == 0 {
-            print("stuff")
-        }
-    }
-    
-    
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)
-        let tweet = self.tweets[(indexPath?.row)!]
+        if let sender = sender as? UITableViewCell {
+            let indexPath = tableView.indexPath(for: sender)
+            let tweet = self.tweets[(indexPath?.row)!]
+            
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.tweet = tweet
+        }
         
-        let detailViewController = segue.destination as! DetailViewController
-        detailViewController.tweet = tweet
+        if let sender = sender as? UIBarButtonItem {
+            let profileViewController = segue.destination as! ProfileViewController
+            profileViewController.user = User._currentUser
+        }
+        
+        if let sender = sender as? UIButton {
+            if let cell = sender.superview?.superview as? TweetCell {
+                let indexPath = tableView.indexPath(for: cell)
+                let tweet = tweets[(indexPath?.row)!]
+                
+                let otherProfileViewController = segue.destination as! OtherProfileViewController
+                otherProfileViewController.user = tweet.user
+            }
+        }
     }
     
-
+    
 }

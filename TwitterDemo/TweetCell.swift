@@ -9,7 +9,7 @@
 import UIKit
 
 class TweetCell: UITableViewCell {
-
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var screenNameLabel: UILabel!
@@ -56,61 +56,64 @@ class TweetCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        var tapTweetRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedRetweetImage(_:)))
+        let tapTweetRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedRetweetImage(_:)))
         self.retweetButton.addGestureRecognizer(tapTweetRecognizer)
         self.retweetButton.isUserInteractionEnabled = true
         
-        var tapFavoriteRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedFavoriteImage(_:)))
+        let tapFavoriteRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tappedFavoriteImage(_:)))
         self.favoriteButton.addGestureRecognizer(tapFavoriteRecognizer)
         self.favoriteButton.isUserInteractionEnabled = true
+        
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
     func tappedRetweetImage(_ sender: Any) {
-        if(tweet.retweeted!) {
-            tweet.retweetCount -= 1
-            retweetButton.image = UIImage(named: "retweet-icon")
-            retweetCountLabel.text = "\(tweet.retweetCount)"
-            tweet.retweeted = false
-        } else {
-            retweetButton.image = UIImage(named: "retweet-icon-green")
-            
-            TwitterClient.sharedInstance?.retweet(id: tweet.id!, success: { (tweet) in
-                
+        if(!((tweet?.retweeted!)!)) {
+            TwitterClient.sharedInstance?.retweet(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.retweetButton.image = UIImage(named: "retweet-icon-green")
+                self.retweetCountLabel.text = "\(response.retweetCount)"
+                self.tweet?.retweeted = true
             }, failure: { (error: Error) in
                 print(error.localizedDescription)
             })
-            
-            tweet.retweetCount += 1
-            retweetCountLabel.text = "\((tweet.retweetCount))"
-            tweet.retweeted = true
+        } else {
+            TwitterClient.sharedInstance?.unretweet(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.retweetButton.image = UIImage(named: "retweet-icon")
+                self.retweetCountLabel.text = "\(response.retweetCount)"
+                self.tweet?.retweeted = false
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
         }
     }
     
     func tappedFavoriteImage(_ sender: Any) {
-        if(tweet.favorited)! {
-            tweet.favoriteCount -= 1
-            favoriteButton.image = UIImage(named: "favor-icon")
-            favoriteCountLabel.text = "\(tweet.favoriteCount)"
-            tweet.favorited = false
-        } else {
-            favoriteButton.image = UIImage(named: "favor-icon-red")
-            
-            TwitterClient.sharedInstance?.favorited(id: tweet.id!, success: {
-                
+        if(!(tweet?.favorited!)!) {
+            TwitterClient.sharedInstance?.favorited(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.favoriteButton.image = UIImage(named: "favor-icon-red")
+                self.favoriteCountLabel.text = "\(response.favoriteCount)"
+                self.tweet?.favorited = true
             }, failure: { (error: Error) in
                 print(error.localizedDescription)
             })
-            
-            tweet.favoriteCount += 1
-            favoriteCountLabel.text = "\(tweet.favoriteCount)"
-            tweet.favorited = true
+        } else {
+            TwitterClient.sharedInstance?.unfavorite(id: (tweet?.id!)!, success: { (response: Tweet) in
+                self.favoriteButton.image = UIImage(named: "favor-icon")
+                self.favoriteCountLabel.text = "\(response.favoriteCount)"
+                self.tweet?.favorited = false
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
         }
+    }
+    
+    @IBAction func otherProfileTap(_ sender: Any) {
+        print("Image tapped!")
     }
     
     func timeSince(time: Int) -> String {
@@ -126,5 +129,5 @@ class TweetCell: UITableViewCell {
         
         return timeString!
     }
-
+    
 }
