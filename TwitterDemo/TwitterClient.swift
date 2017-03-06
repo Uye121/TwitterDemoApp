@@ -130,4 +130,16 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)
         }
     }
+    
+    
+    func replyTweet(text: String, id: Int, success: @escaping (Tweet) -> (), failure: @escaping (Error) -> ())
+    {
+        post("1.1/statuses/update.json", parameters: ["status": text, "in_reply_to_status_id": id], progress: nil, success: { (task:  URLSessionDataTask, response: Any) -> Void in
+            let dictionary = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: dictionary)
+            success(tweet)
+        }) { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        }
+    }
 }

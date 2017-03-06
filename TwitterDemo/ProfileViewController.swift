@@ -31,8 +31,8 @@ class ProfileViewController: UIViewController {
             self.screenNameLabel.text = user.screenName
             
             self.tweetCountLabel.text = "\(user.tweetCount!)"
-            self.followingCountLabel.text = "\(user.followingCount!)"
-            self.followersCountLabel.text = "\(user.followerCount!)"
+            self.followingCountLabel.text = "\(user.followerCount!)"
+            self.followersCountLabel.text = "\(user.followingCount!)"
             //self.backgroundImage.setImageWith(user.profileBackgroundURL!)
         }, failure: { (error: Error) in
             print(error.localizedDescription)
@@ -45,6 +45,9 @@ class ProfileViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func dismissView(_ sender: Any) {
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
     
     /*
      // MARK: - Navigation

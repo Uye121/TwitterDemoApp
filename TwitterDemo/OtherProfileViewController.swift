@@ -52,7 +52,7 @@ class OtherProfileViewController: UIViewController {
         
         return numberOfPeople!
     }
-    
+
     /*
      // MARK: - Navigation
      

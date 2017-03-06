@@ -35,6 +35,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        TwitterClient.sharedInstance?.homeTimeLine(success: { (tweets: [Tweet]) in
+            
+            self.tableView.reloadData()
+        }, failure: { (error) in
+            print(error.localizedDescription)
+        })
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -73,8 +82,14 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         if let sender = sender as? UIBarButtonItem {
-            let profileViewController = segue.destination as! ProfileViewController
-            profileViewController.user = User._currentUser
+            if(sender.title == "Profile") {
+                let profileViewController = segue.destination as! ProfileViewController
+                profileViewController.user = User._currentUser
+            } else {
+                print("success")
+                let replyViewController = segue.destination as! ReplyViewController
+                replyViewController.user = User._currentUser
+            }
         }
         
         if let sender = sender as? UIButton {
