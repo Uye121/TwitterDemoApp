@@ -32,7 +32,7 @@ class DetailViewController: UIViewController {
         profileImage.setImageWith((tweet?.user?.profileURL)!)
         userNameLabel.text = tweet?.user?.name
         screenNameLabel.text = tweet?.user?.screenName
-        descriptionLabel.text = tweet?.user?.tagline
+        descriptionLabel.text = tweet?.text
         timeLabel.text = tweet?.timeString
         if let screenName = tweet?.user?.screenName {
             screenNameLabel.text = "@\(screenName)"
