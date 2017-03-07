@@ -36,8 +36,8 @@ class OtherProfileViewController: UIViewController, UITableViewDelegate, UITable
         self.userNameLabel.text = user.name
         self.screenNameLabel.text = user.screenName
         self.tweetCountLabel.text = convertNumber(people: user.tweetCount!)
-        self.followingCountLabel.text = convertNumber(people: user.followingCount!)
-        self.followersCountLabel.text = convertNumber(people: user.followerCount!)
+        self.followingCountLabel.text = convertNumber(people: user.followerCount!)
+        self.followersCountLabel.text = convertNumber(people: user.followingCount!)
         
     }
     

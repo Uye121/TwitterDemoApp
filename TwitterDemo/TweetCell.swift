@@ -28,7 +28,7 @@ class TweetCell: UITableViewCell {
             if let userTag = tweet.user?.screenName {
                 screenNameLabel.text = "@\(userTag)"
             }
-            descriptionLabel.text = tweet.user?.tagline
+            descriptionLabel.text = tweet.text
             
             let timePast = Int(Date().timeIntervalSince(tweet.timeStamp!))
             let timeAgo = timeSince(time: timePast)

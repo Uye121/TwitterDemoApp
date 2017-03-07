@@ -63,7 +63,7 @@ class User: NSObject {
             }
             return _currentUser
         }
-        
+        //a5656d61696cb279796539
         set(user) {
             _currentUser = user
             
