@@ -37,7 +37,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         TwitterClient.sharedInstance?.homeTimeLine(success: { (tweets: [Tweet]) in
-            
+            self.tweets = tweets
             self.tableView.reloadData()
         }, failure: { (error) in
             print(error.localizedDescription)
@@ -85,6 +85,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if(sender.title == "Profile") {
                 let profileViewController = segue.destination as! ProfileViewController
                 profileViewController.user = User._currentUser
+                profileViewController.tweets = self.tweets
             } else {
                 print("success")
                 let replyViewController = segue.destination as! ReplyViewController

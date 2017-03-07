@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var profileImage: UIImageView!
@@ -17,11 +17,19 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var tweetCountLabel: UILabel!
     @IBOutlet weak var followingCountLabel: UILabel!
     @IBOutlet weak var followersCountLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
     var user: User!
+    var tweets: [Tweet]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
         
         // Do any additional setup after loading the view.
         TwitterClient.sharedInstance?.currentAccount(success: { (user) in
@@ -47,6 +55,19 @@ class ProfileViewController: UIViewController {
     
     @IBAction func dismissView(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.tweets?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
+        
+        cell.tweet = tweets[indexPath.row]
+        cell.selectionStyle = .none
+        
+        return cell
     }
     
     /*

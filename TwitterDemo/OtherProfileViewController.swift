@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OtherProfileViewController: UIViewController {
+class OtherProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var backgroundImage: UIImageView!
@@ -17,11 +17,19 @@ class OtherProfileViewController: UIViewController {
     @IBOutlet weak var tweetCountLabel: UILabel!
     @IBOutlet weak var followingCountLabel: UILabel!
     @IBOutlet weak var followersCountLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
     var user: User!
+    var tweets: [Tweet]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
         
         // Do any additional setup after loading the view.
         self.profileImage.setImageWith(user.profileURL!)
@@ -31,6 +39,15 @@ class OtherProfileViewController: UIViewController {
         self.followingCountLabel.text = convertNumber(people: user.followingCount!)
         self.followersCountLabel.text = convertNumber(people: user.followerCount!)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        TwitterClient.sharedInstance?.userTimeline(id: user.userID!, success: { (tweets:[Tweet]) in
+            self.tweets = tweets
+            self.tableView.reloadData()
+        }, failure: { (error: Error) in
+            print(error.localizedDescription)
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -53,6 +70,19 @@ class OtherProfileViewController: UIViewController {
         return numberOfPeople!
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.tweets?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
+        
+        cell.tweet = tweets[indexPath.row]
+        cell.selectionStyle = .none
+        
+        return cell
+    }
+    
     /*
      // MARK: - Navigation
      
